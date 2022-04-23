@@ -1,0 +1,2 @@
+rootProject.name = "VHOwl"
+include ':app'
