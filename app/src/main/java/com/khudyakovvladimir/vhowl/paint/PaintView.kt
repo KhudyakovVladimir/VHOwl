@@ -130,6 +130,7 @@ class PaintView(context: Context): SurfaceView(context), SurfaceHolder.Callback 
         }
     }
 
+    //stay here
     fun isCaughtByOwl(mouse: Mouse, owl: Owl): Boolean {
         Log.d("TAG", "isCaughtByOwl()")
        // if(mouse.x == owl.x && mouse.y + 10 == owl.y + 10) {
