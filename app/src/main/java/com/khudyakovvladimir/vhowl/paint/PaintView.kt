@@ -20,13 +20,12 @@ class PaintView(context: Context): SurfaceView(context), SurfaceHolder.Callback 
     var path: Path? = null
     var paint: Paint? = null
     var canvas: Canvas? = null
-    private var bitmapOwl: Bitmap? = null
-    private var bitmapMouse: Bitmap? = null
+
     private var bitmapBackground: Bitmap? = null
 
     //val pixel = Pixel(500F, 1000F)
-    val owl = Owl(500F, 1000F)
-    val mouse = Mouse(980F, 1800F, 15F,100F,true)
+    val owl = Owl(500F, 1000F, context)
+    val mouse = Mouse(980F, 1800F, 15F,100F,true, context)
 
     init {
         holder.addCallback(this)
@@ -38,8 +37,6 @@ class PaintView(context: Context): SurfaceView(context), SurfaceHolder.Callback 
 
         customizePaint(Color.YELLOW)
 
-        bitmapOwl = BitmapFactory.decodeResource(this.resources, R.drawable.flying_owl)
-        bitmapMouse = BitmapFactory.decodeResource(this.resources, R.drawable.mouse)
         bitmapBackground = BitmapFactory.decodeResource(this.resources, R.drawable.forest_background_small)
     }
 
@@ -56,16 +53,8 @@ class PaintView(context: Context): SurfaceView(context), SurfaceHolder.Callback 
 
     }
 
-    fun initCanvasArray() {
-
-    }
-
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
-        //customizePaint(Color.YELLOW)
-        //drawPixel(pixel, canvas)
-        //drawItem(pixel, canvas, bitmapOwl!!)
-
         drawBackgroundDrawable(canvas)
         drawOwl(canvas)
         drawMouse(canvas)
@@ -82,18 +71,15 @@ class PaintView(context: Context): SurfaceView(context), SurfaceHolder.Callback 
     }
 
     fun drawMouse(canvas: Canvas?) {
-        canvas?.drawBitmap(bitmapMouse!!, mouse.x, mouse.y, null)
+        mouse.drawMouse(canvas)
     }
 
     fun drawOwl(canvas: Canvas?) {
-        canvas?.drawBitmap(bitmapOwl!!, owl.x - 100F, owl.y - 100F, null)
+        owl.drawOwl(canvas)
     }
 
     fun drawItem(pixel: Pixel, canvas: Canvas?, bitmap: Bitmap) {
         canvas?.drawBitmap(bitmap, pixel.x - 100F, pixel.y - 100F, null)
-        //to move the object with you finger
-        //*param -100F(finger diameter)
-        //canvas?.drawBitmap(bitmap, pixel.x - 100F, pixel.y - 100F, paint)
     }
 
     fun drawBackgroundDrawable(canvas: Canvas?) {
@@ -103,18 +89,15 @@ class PaintView(context: Context): SurfaceView(context), SurfaceHolder.Callback 
     fun update() {
         updateOwlLocation()
         updateMouseLocation()
-        //isCaughtByOwl(mouse, owl)
     }
 
     fun updateOwlLocation() {
         val delta = 5F
         if (owl.x < 950) {
             owl.x =  owl.x + delta
-            //pixel.y =  pixel.y + delta
         }
         if (owl.x == 950F) {
             owl.x = 0F
-            //owl.y = 0F
         }
     }
 
@@ -122,23 +105,18 @@ class PaintView(context: Context): SurfaceView(context), SurfaceHolder.Callback 
         val delta = mouse.speed
         if (mouse.x > -40F) {
             mouse.x =  mouse.x - delta
-            //mouse.y =  mouse.y + delta
         }
         if (mouse.x == -40F) {
             mouse.x = 1080F
-            //mouse.y = 1000F
         }
     }
 
-    //stay here
     fun isCaughtByOwl(mouse: Mouse, owl: Owl): Boolean {
         Log.d("TAG", "isCaughtByOwl()")
-       // if(mouse.x == owl.x && mouse.y + 10 == owl.y + 10) {
         if(owl.x in mouse.x - mouse.radius..mouse.x + mouse.radius && owl.y in mouse.y - mouse.radius..mouse.y + mouse.radius) {
             Log.d("TAG", "___GAME---OVER___")
             mouse.isAlive = false
             mouse.x = 980F
-            //mouse.y = 1800F
             val randomPositionByY = (1200..2000).random().toFloat()
             val randomSpeed = (10..25).random().toFloat()
             mouse.y = randomPositionByY
@@ -153,35 +131,18 @@ class PaintView(context: Context): SurfaceView(context), SurfaceHolder.Callback 
         val touchY = event.y
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                //Log.d("TAG", "ACTION_DOWN")
                 owl.x = touchX
                 owl.y = touchY
                 isCaughtByOwl(mouse, owl)
-                //drawPixel(pixel, canvas)
-                //drawItem(pixel, canvas, bitmapOwl!!)
-                Log.d("TAG", "mouse.x = ${mouse.x}")
-                Log.d("TAG", "mouse.y = ${mouse.y}")
-                Log.d("TAG", "owl.x = ${owl.x}")
-                Log.d("TAG", "owl.y = ${owl.y}")
             }
             MotionEvent.ACTION_MOVE -> {
-                //Log.d("TAG", "ACTION_MOVE")
                 owl.x = touchX
                 owl.y = touchY
                 isCaughtByOwl(mouse, owl)
-//                Log.d("TAG", "mouse.x = ${mouse.x}")
-//                Log.d("TAG", "mouse.y = ${mouse.y}")
-//                Log.d("TAG", "owl.x = ${owl.x}")
-//                Log.d("TAG", "owl.y = ${owl.y}")
-                //drawPixel(pixel, canvas)
-                //drawItem(pixel, canvas, bitmapOwl!!)
             }
             MotionEvent.ACTION_UP -> {
-                //Log.d("TAG", "ACTION_UP")
                 owl.x = touchX
                 owl.y = touchY
-                //drawPixel(pixel, canvas)
-                //drawItem(pixel, canvas, bitmapOwl!!)
                 drawOwl(canvas)
             }
             else -> return false
