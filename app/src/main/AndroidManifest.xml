@@ -12,6 +12,7 @@
             android:theme="@style/Theme.VHOwl">
         <activity
                 android:exported="true"
+                android:screenOrientation="portrait"
                 android:theme="@style/Theme.VHOwl.Launcher"
                 android:name=".view.MainActivity">
             <intent-filter>

@@ -3,6 +3,7 @@ package com.khudyakovvladimir.vhowl.di
 import android.app.Application
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.view.GameFragment
+import com.khudyakovvladimir.vhowl.view.StartFragment
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -12,6 +13,7 @@ import dagger.Provides
 interface AppComponent {
 
     fun injectGameFragment(gameFragment: GameFragment)
+    fun injectStartFragment(startFragment: StartFragment)
 
     @Component.Builder
     interface Builder {

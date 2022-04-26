@@ -1,22 +1,14 @@
-package com.khudyakovvladimir.vhowl.paint
+package com.khudyakovvladimir.vhowl.game
 
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.*
-import com.khudyakovvladimir.vhowl.R
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 
-class Owl(
+class Pixel(
     var x: Float,
-    var y: Float,
-    context: Context
+    var y: Float
 ) {
-
-    val owlBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.flying_owl)
-
-    fun drawOwl(canvas: Canvas?) {
-        canvas?.drawBitmap(owlBitmap, x - 100F, y - 100F, null)
-    }
-
     fun update() {
         var delta = 5F
         if (this.x < 950) {

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.khudyakovvladimir.vhowl.paint.PaintView
+import com.khudyakovvladimir.vhowl.game.GameView
 import com.khudyakovvladimir.vhowl.app.appComponent
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
@@ -49,7 +49,7 @@ class GameFragment: Fragment() {
        // setListeners()
 
         linearLayout = view.findViewById(R.id.linearLayout)
-        linearLayout.addView(PaintView(activity!!.applicationContext))
+        linearLayout.addView(GameView(activity!!.applicationContext))
 
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)

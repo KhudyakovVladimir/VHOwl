@@ -1,4 +1,4 @@
-package com.khudyakovvladimir.vhowl.paint
+package com.khudyakovvladimir.vhowl.game
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -18,20 +18,5 @@ class Mouse(
 
     fun drawMouse(canvas: Canvas?) {
         canvas?.drawBitmap(mouseBitmap!!, x, y, null)
-    }
-
-    fun move() {
-//        while (x > 100F) {
-//            x -= 10F
-//        }
-        val delta = 5F
-        if (x < 950) {
-            x += delta
-            //pixel.y =  pixel.y + delta
-        }
-        if (x == 950F) {
-            x = 0F
-            y = 0F
-        }
     }
 }

@@ -4,5 +4,9 @@
             android:id="@+id/graph" app:startDestination="@id/canvasFragment">
 
     <fragment android:id="@+id/canvasFragment" android:name="com.khudyakovvladimir.vhowl.view.GameFragment"
-              android:label="CanvasFragment"/>
+              android:label="CanvasFragment">
+        <action android:id="@+id/action_canvasFragment_to_startFragment" app:destination="@id/startFragment"/>
+    </fragment>
+    <fragment android:id="@+id/startFragment" android:name="com.khudyakovvladimir.vhowl.view.StartFragment"
+              android:label="StartFragment"/>
 </navigation>
