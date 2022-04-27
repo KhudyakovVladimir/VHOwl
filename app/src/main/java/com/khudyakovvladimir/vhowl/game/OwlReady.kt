@@ -25,7 +25,7 @@ class OwlReady @JvmOverloads constructor(
         paint.color = Color.WHITE
         paint.strokeWidth = 3f
 
-        canvas?.drawBitmap(owlReadyBitmap, (canvas.width / 2).toFloat() - (owlReadyBitmap.width / 2), 400F, null)
+        canvas?.drawBitmap(owlReadyBitmap, (canvas.width / 2).toFloat() - (owlReadyBitmap.width / 2), 100F, null)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

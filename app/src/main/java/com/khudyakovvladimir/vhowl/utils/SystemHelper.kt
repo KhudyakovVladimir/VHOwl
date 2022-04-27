@@ -16,6 +16,9 @@ import javax.inject.Inject
 
 class SystemHelper @Inject constructor() {
 
+    var countOfMouse = 0
+    var time = "0"
+
     fun getCellSize(fragment: Fragment): Float {
         val w: WindowManager = fragment.activity!!.windowManager
         val d = w.defaultDisplay

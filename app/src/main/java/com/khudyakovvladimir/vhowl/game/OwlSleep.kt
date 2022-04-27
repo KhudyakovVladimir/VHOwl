@@ -25,7 +25,7 @@ class OwlSleep @JvmOverloads constructor(
         paint.color = Color.WHITE
         paint.strokeWidth = 3f
 
-        canvas?.drawBitmap(owlSleepBitmap, (canvas.width / 2).toFloat() - (owlSleepBitmap.width / 2), 300F, null)
+        canvas?.drawBitmap(owlSleepBitmap, (canvas.width / 2).toFloat() - (owlSleepBitmap.width / 2), 100F, null)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

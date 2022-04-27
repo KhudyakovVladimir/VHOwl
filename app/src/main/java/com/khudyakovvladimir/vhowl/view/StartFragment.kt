@@ -3,6 +3,7 @@ package com.khudyakovvladimir.vhowl.view
 import androidx.navigation.fragment.findNavController
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,7 @@ class StartFragment: Fragment() {
     lateinit var systemHelper: SystemHelper
 
     lateinit var owlSleep: OwlSleep
-    //lateinit var owlReady: OwlReady
+    lateinit var owlReady: OwlReady
     lateinit var constraintLayout: ConstraintLayout
 
     override fun onAttach(context: Context) {
@@ -44,16 +45,19 @@ class StartFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        owlSleep = view.findViewById(R.id.owlSleep)
-       // owlReady = view.findViewById(R.id.owlReady)
-
-        owlSleep.setOnClickListener { activity?.finishAndRemoveTask() }
-        //owlReady.setOnClickListener { findNavController().navigate(R.id.gameFragment) }
-
         constraintLayout = view.findViewById(R.id.constraintLayout)
         systemHelper.fadeInView(constraintLayout, 1000)
 
+        owlSleep = view.findViewById(R.id.owlSleep)
+        owlReady = view.findViewById(R.id.owlReady)
+
+        owlSleep.setOnClickListener { activity?.finishAndRemoveTask() }
+        owlReady.setOnClickListener { findNavController().navigate(R.id.gameFragment) }
+
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
+
+        Log.d("TAG", "mouse = ${systemHelper.countOfMouse}")
+        Log.d("TAG", "time = ${systemHelper.time}")
     }
 }

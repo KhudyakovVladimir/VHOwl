@@ -8,7 +8,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.navigation.findNavController
 import com.khudyakovvladimir.vhowl.R
-import java.util.concurrent.TimeUnit
+import com.khudyakovvladimir.vhowl.utils.SystemHelper
 
 
 class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
@@ -19,7 +19,9 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
 
     private var bitmapBackground: Bitmap? = null
 
-    val owl = Owl(500F, 1000F, context)
+    var countOfMouses = 0
+
+    val owl = Owl(100F, 1000F, context)
     val mouse = Mouse(980F, 1800F, 5F,100F,true, context)
     val cloud = Cloud(980F, 400F, 20F, 100F, 1000F, context)
     val cloud2 = Cloud(1280F, 600F, 15F, 100F, 1000F, context)
@@ -158,16 +160,18 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
         return list
     }
 
-    fun isCaughtByOwl(_mouse: Mouse, owl: Owl): Boolean {
+    fun isCaughtByMouse(_mouse: Mouse, owl: Owl): Boolean {
         //Log.d("TAG", "isCaughtByOwl()")
         if(owl.x in _mouse.x - _mouse.radius.._mouse.x + _mouse.radius && owl.y in _mouse.y - _mouse.radius.._mouse.y + _mouse.radius) {
+            countOfMouses++
             mouse.isAlive = false
             mouse.x = 980F
             val randomPositionByY = (1200..2000).random().toFloat()
             val randomSpeed = (20..45).random().toFloat()
             mouse.y = randomPositionByY
             mouse.speed = randomSpeed
-            //Log.d("TAG", "mouse.speed = ${mouse.speed}")
+            Log.d("TAG", "countOfMouses = $countOfMouses")
+            SystemHelper().countOfMouse = countOfMouses
             return true
         }
         return false
@@ -195,7 +199,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
             MotionEvent.ACTION_DOWN -> {
                 owl.x = touchX
                 owl.y = touchY
-                isCaughtByOwl(mouse, owl)
+                isCaughtByMouse(mouse, owl)
                 isCaughtByCloud(cloud, owl)
                 isCaughtByCloud(cloud2, owl)
                 isCaughtByCloud(cloud3, owl)
@@ -203,7 +207,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
             MotionEvent.ACTION_MOVE -> {
                 owl.x = touchX
                 owl.y = touchY
-                isCaughtByOwl(mouse, owl)
+                isCaughtByMouse(mouse, owl)
                 isCaughtByCloud(cloud, owl)
                 isCaughtByCloud(cloud2, owl)
                 isCaughtByCloud(cloud3, owl)

@@ -2,6 +2,7 @@ package com.khudyakovvladimir.vhowl.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +26,17 @@ class GameFragment: Fragment() {
 
     lateinit var linearLayout: LinearLayout
 
+    var startTime = 0
+    var endTime = 0
+
     @Inject
     lateinit var systemHelper: SystemHelper
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         context.appComponent.injectGameFragment(this)
+
+        startTime = System.currentTimeMillis().toInt()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,5 +51,25 @@ class GameFragment: Fragment() {
 
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        var word = ""
+        endTime = (System.currentTimeMillis().toInt() - startTime) / 1000
+        if(endTime == 1) {
+            word = "Вы продержались $endTime секунду"
+        }
+        if(endTime in 2..4) {
+            word = "Вы продержались $endTime секунды"
+        }
+        if(endTime in 5..59) {
+            word = "Вы продержались $endTime секунд"
+        }
+        if(endTime > 60) {
+            word = "Вы продержались ${endTime.toDouble() / 60} минут"
+        }
+        Log.d("TAG", "endTime = $word")
+        systemHelper.time = word
     }
 }

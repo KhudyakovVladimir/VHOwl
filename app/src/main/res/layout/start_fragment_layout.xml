@@ -10,22 +10,15 @@
 
 
     <com.khudyakovvladimir.vhowl.game.OwlReady
-        android:id="@+id/owlReady"
-        android:layout_width="407dp"
-        android:layout_height="358dp"
-        tools:layout_editor_absoluteX="4dp"
-        tools:layout_editor_absoluteY="4dp">
-
-    </com.khudyakovvladimir.vhowl.game.OwlReady>
-
+            android:layout_width="171dp"
+            android:layout_height="160dp" android:id="@+id/owlReady"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="84dp"
+    />
     <com.khudyakovvladimir.vhowl.game.OwlSleep
-        android:id="@+id/owlSpeep"
-        android:layout_width="408dp"
-        android:layout_height="416dp"
-        tools:layout_editor_absoluteX="-8dp"
-        tools:layout_editor_absoluteY="318dp" />
-    ">
-
-    </com.khudyakovvladimir.vhowl.game.OwlSleep>
-
+            android:layout_width="166dp"
+            android:layout_height="169dp" android:id="@+id/owlSleep"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/owlReady" android:layout_marginTop="148dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.0"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
