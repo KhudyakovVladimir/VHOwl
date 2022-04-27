@@ -86,7 +86,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
 
     fun update() {
         updateOwlLocation()
-        updateMouseLocation()
+        updateMouseLocation(mouse)
         updateCloudLocation(cloud)
         updateCloudLocation(cloud2)
         updateCloudLocation(cloud3)
@@ -102,23 +102,25 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
         }
     }
 
-    fun updateMouseLocation() {
+    fun updateMouseLocation(mouse: Mouse) {
         val delta = mouse.speed
-        if (mouse.x > -20F) {
+        if (mouse.x > -360F) {
             mouse.x = mouse.x - delta
         }
-        if (mouse.x == 0F) {
-            mouse.x = 1080F
+        if (mouse.x < -300F) {
+            //mouse.x = 1080F
+            gameThread?.isRunning = false
+            findNavController().navigate(R.id.startFragment)
         }
     }
 
     fun updateCloudLocation(cloud: Cloud) {
-        Log.d("TAG", "updateCloudLocation()")
+        //Log.d("TAG", "updateCloudLocation()")
         val delta = cloud.speed
-        if (cloud.x > -20F) {
+        if (cloud.x > -240F) {
             cloud.x = cloud.x - delta
         }
-        if (cloud.x < 0F) {
+        if (cloud.x < -200F) {
             cloud.x = 1080F
             cloud.y = (600..1800).random().toFloat()
         }
@@ -157,7 +159,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
     }
 
     fun isCaughtByOwl(_mouse: Mouse, owl: Owl): Boolean {
-        Log.d("TAG", "isCaughtByOwl()")
+        //Log.d("TAG", "isCaughtByOwl()")
         if(owl.x in _mouse.x - _mouse.radius.._mouse.x + _mouse.radius && owl.y in _mouse.y - _mouse.radius.._mouse.y + _mouse.radius) {
             mouse.isAlive = false
             mouse.x = 980F
@@ -172,7 +174,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
     }
 
     fun isCaughtByCloud(_cloud: Cloud, owl: Owl): Boolean {
-        Log.d("TAG", "isCaughtByOwl()")
+        //Log.d("TAG", "isCaughtByOwl()")
         if(owl.x in _cloud.x - _cloud.radius.._cloud.x + _cloud.radius && owl.y in _cloud.y - _cloud.radius.._cloud.y + _cloud.radius) {
             _cloud.x = 1080F
             val randomPositionByY = (1200..2000).random().toFloat()

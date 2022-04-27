@@ -15,6 +15,7 @@ import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
+import com.khudyakovvladimir.vhowl.game.OwlSleep
 import javax.inject.Inject
 
 class StartFragment: Fragment() {
@@ -27,7 +28,9 @@ class StartFragment: Fragment() {
     @Inject
     lateinit var systemHelper: SystemHelper
 
-    lateinit var button: Button
+    lateinit var buttonPlayAgain: Button
+    lateinit var buttonExit: Button
+    lateinit var owlSleep: OwlSleep
     lateinit var constraintLayout: ConstraintLayout
 
     override fun onAttach(context: Context) {
@@ -42,10 +45,17 @@ class StartFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button = view.findViewById(R.id.button)
-        button.setOnClickListener {
+        buttonPlayAgain = view.findViewById(R.id.buttonPlayAgain)
+        buttonExit = view.findViewById(R.id.buttonExit)
+        owlSleep = view.findViewById(R.id.owlSpeep)
+
+        buttonPlayAgain.setOnClickListener {
             findNavController().navigate(R.id.canvasFragment)
         }
+
+        buttonExit.setOnClickListener { activity?.finishAndRemoveTask() }
+
+        owlSleep.setOnClickListener { activity?.finishAndRemoveTask() }
 
         constraintLayout = view.findViewById(R.id.constraintLayout)
         systemHelper.fadeInView(constraintLayout, 1000)
