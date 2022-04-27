@@ -3,7 +3,6 @@ package com.khudyakovvladimir.vhowl.game
 import android.graphics.Canvas
 import android.view.SurfaceHolder
 
-
 class GameThread(
     var surfaceHolder: SurfaceHolder,
     var gameView: GameView,

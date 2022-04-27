@@ -1,6 +1,5 @@
 package com.khudyakovvladimir.vhowl.view
 
-import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import android.content.Context
 import android.os.Bundle
@@ -15,6 +14,7 @@ import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
+import com.khudyakovvladimir.vhowl.game.OwlReady
 import com.khudyakovvladimir.vhowl.game.OwlSleep
 import javax.inject.Inject
 
@@ -28,9 +28,8 @@ class StartFragment: Fragment() {
     @Inject
     lateinit var systemHelper: SystemHelper
 
-    lateinit var buttonPlayAgain: Button
-    lateinit var buttonExit: Button
     lateinit var owlSleep: OwlSleep
+    //lateinit var owlReady: OwlReady
     lateinit var constraintLayout: ConstraintLayout
 
     override fun onAttach(context: Context) {
@@ -45,17 +44,11 @@ class StartFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        buttonPlayAgain = view.findViewById(R.id.buttonPlayAgain)
-        buttonExit = view.findViewById(R.id.buttonExit)
-        owlSleep = view.findViewById(R.id.owlSpeep)
-
-        buttonPlayAgain.setOnClickListener {
-            findNavController().navigate(R.id.canvasFragment)
-        }
-
-        buttonExit.setOnClickListener { activity?.finishAndRemoveTask() }
+        owlSleep = view.findViewById(R.id.owlSleep)
+       // owlReady = view.findViewById(R.id.owlReady)
 
         owlSleep.setOnClickListener { activity?.finishAndRemoveTask() }
+        //owlReady.setOnClickListener { findNavController().navigate(R.id.gameFragment) }
 
         constraintLayout = view.findViewById(R.id.constraintLayout)
         systemHelper.fadeInView(constraintLayout, 1000)

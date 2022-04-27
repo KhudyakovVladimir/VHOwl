@@ -16,7 +16,7 @@ class OwlSleep @JvmOverloads constructor(
 ): View(context, attributeSet, defStyleAttr) {
 
     val paint = Paint()
-    val owlSleepBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.flying_owl)
+    val owlSleepBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.sleeping_owl)
     private var onClickListener: OnClickListener? = null
 
     override fun onDraw(canvas: Canvas?) {
@@ -25,7 +25,7 @@ class OwlSleep @JvmOverloads constructor(
         paint.color = Color.WHITE
         paint.strokeWidth = 3f
 
-        canvas?.drawBitmap(owlSleepBitmap, (canvas.width / 2).toFloat() - (owlSleepBitmap.width / 2), 0F, null)
+        canvas?.drawBitmap(owlSleepBitmap, (canvas.width / 2).toFloat() - (owlSleepBitmap.width / 2), 300F, null)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
