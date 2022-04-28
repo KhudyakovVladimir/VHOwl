@@ -15,6 +15,7 @@ import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
+import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import javax.inject.Inject
 
 class GameFragment: Fragment() {
@@ -31,6 +32,9 @@ class GameFragment: Fragment() {
 
     @Inject
     lateinit var systemHelper: SystemHelper
+
+    @Inject
+    lateinit var soundHelper: SoundHelper
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,6 +55,8 @@ class GameFragment: Fragment() {
 
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
+
+        //soundHelper.playSoundWind(false)
     }
 
     override fun onStop() {
