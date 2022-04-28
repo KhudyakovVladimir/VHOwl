@@ -29,6 +29,7 @@ class GameThread(
         var lastFpsTime: Long = 0
 
         while (isRunning) {
+            gameView.soundHelper.playSoundWind(false)
             canvas = null
 
             try {

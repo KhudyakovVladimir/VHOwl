@@ -15,8 +15,11 @@ import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
+import com.khudyakovvladimir.vhowl.app.data
 import com.khudyakovvladimir.vhowl.game.OwlReady
 import com.khudyakovvladimir.vhowl.game.OwlSleep
+import com.khudyakovvladimir.vhowl.utils.SoundHelper
+import kotlinx.android.synthetic.main.start_fragment_layout.*
 import javax.inject.Inject
 
 class StartFragment: Fragment() {
@@ -29,8 +32,9 @@ class StartFragment: Fragment() {
     @Inject
     lateinit var systemHelper: SystemHelper
 
-    lateinit var owlSleep: OwlSleep
-    lateinit var owlReady: OwlReady
+    @Inject
+    lateinit var soundHelper: SoundHelper
+
     lateinit var constraintLayout: ConstraintLayout
 
     override fun onAttach(context: Context) {
@@ -48,16 +52,22 @@ class StartFragment: Fragment() {
         constraintLayout = view.findViewById(R.id.constraintLayout)
         systemHelper.fadeInView(constraintLayout, 1000)
 
-        owlSleep = view.findViewById(R.id.owlSleep)
-        owlReady = view.findViewById(R.id.owlReady)
-
-        owlSleep.setOnClickListener { activity?.finishAndRemoveTask() }
-        owlReady.setOnClickListener { findNavController().navigate(R.id.gameFragment) }
+        owlSleep.setOnClickListener {
+            soundHelper.playSoundMouseWin(false)
+            activity?.finishAndRemoveTask()
+        }
+        owlReady.setOnClickListener {
+            soundHelper.playSoundOwl(false)
+            findNavController().navigate(R.id.gameFragment)
+        }
 
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
-        Log.d("TAG", "mouse = ${systemHelper.countOfMouse}")
-        Log.d("TAG", "time = ${systemHelper.time}")
+        textViewTime.text = context!!.data.time
+        textViewCount.text = "Поймано мышек - ${context!!.data.countOfMouse}"
+
+        Log.d("TAG", "app mouse = ${context!!.data.countOfMouse}")
+        Log.d("TAG", "app time = ${context!!.data.time}")
     }
 }

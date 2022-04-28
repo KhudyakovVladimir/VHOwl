@@ -10,6 +10,7 @@ import android.view.SurfaceView
 import androidx.navigation.findNavController
 import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.appComponent
+import com.khudyakovvladimir.vhowl.app.data
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import javax.inject.Inject
@@ -28,9 +29,9 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
 
     val owl = Owl(100F, 1000F, context)
     val mouse = Mouse(1000F, 1800F, 15F,100F,true, context)
-    val cloud = Cloud(1000F, 400F, 20F, 100F, 1000F, context)
-    val cloud2 = Cloud(1300F, 800F, 15F, 100F, 1000F, context)
-    val cloud3 = Cloud(1600F, 1200F, 5F, 100F, 1000F, context)
+    val cloud = Cloud(1000F, 400F, 20F, 30F, 1000F, context)
+    val cloud2 = Cloud(1300F, 800F, 15F, 30F, 1000F, context)
+    val cloud3 = Cloud(1600F, 1200F, 5F, 30F, 1000F, context)
     val background = Background(0F, context)
     val listOfClouds = generateClouds()
 
@@ -130,6 +131,8 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
         }
         if (mouse.x < -300F) {
             //mouse.x = 1080F
+            soundHelper.playSoundMouseWin(false)
+            soundHelper.stopSoundWind()
             gameThread?.isRunning = false
             findNavController().navigate(R.id.startFragment)
         }
@@ -194,7 +197,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
             mouse.y = randomPositionByY
             mouse.speed = randomSpeed
             Log.d("TAG", "countOfMouses = $countOfMouses")
-            SystemHelper().countOfMouse = countOfMouses
+            context.data.countOfMouse = countOfMouses
             return true
         }
         return false
@@ -222,7 +225,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
         val touchY = event.y
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                soundHelper.playSoundWind(false)
+//                soundHelper.playSoundWind(false)
                 soundHelper.playSoundOwl(false)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     soundHelper.vibrate(context, 10)

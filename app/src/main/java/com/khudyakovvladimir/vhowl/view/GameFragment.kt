@@ -15,6 +15,8 @@ import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
+import com.khudyakovvladimir.vhowl.app.data
+import com.khudyakovvladimir.vhowl.game.Data
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import javax.inject.Inject
 
@@ -76,6 +78,6 @@ class GameFragment: Fragment() {
             word = "Вы продержались ${endTime.toDouble() / 60} минут"
         }
         Log.d("TAG", "endTime = $word")
-        systemHelper.time = word
+        context?.data?.time = word
     }
 }
