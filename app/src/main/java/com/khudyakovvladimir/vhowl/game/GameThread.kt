@@ -1,25 +1,19 @@
 package com.khudyakovvladimir.vhowl.game
 
+import android.content.Context
 import android.graphics.Canvas
 import android.view.SurfaceHolder
+import com.khudyakovvladimir.vhowl.app.data
 
 class GameThread(
     var surfaceHolder: SurfaceHolder,
     var gameView: GameView,
+    var context: Context
     ): Thread() {
-
-    val monitor = 1
-    var optionInput = 0
-    private var itemX = 0f
-    val canvasWidth = 1080
-    val canvasHeight = 2400
-    val targetFPS = 50
 
     companion object {
         private var canvas: Canvas? = null
     }
-
-    var isRunning = false
 
     override fun run() {
 
@@ -28,7 +22,7 @@ class GameThread(
         val OPTIMAL_TIME = (1000000000 / TARGET_FPS).toLong()
         var lastFpsTime: Long = 0
 
-        while (isRunning) {
+        while (context.data.isRunning) {
             gameView.soundHelper.playSoundWind(false)
             canvas = null
 
@@ -46,8 +40,15 @@ class GameThread(
                         lastFpsTime = 0
                     }
 
-                    gameView.update()
+                    if (!context.data.isPause) {
+                        gameView.update()
+                        gameView.soundHelper.playSoundWind(false)
+                    }else {
+                        gameView.soundOff()
+                    }
+
                     gameView.draw(canvas!!)
+
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

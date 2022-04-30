@@ -14,7 +14,7 @@ class Mouse(
     context: Context
 ) {
 
-    val mouseBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.mouse)
+    private val mouseBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.mouse)
 
     fun drawMouse(canvas: Canvas?) {
         canvas?.drawBitmap(mouseBitmap!!, x, y, null)

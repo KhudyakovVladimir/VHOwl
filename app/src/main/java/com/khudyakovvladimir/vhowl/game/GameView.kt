@@ -3,7 +3,7 @@ package com.khudyakovvladimir.vhowl.game
 import android.content.Context
 import android.graphics.*
 import android.os.Build
-import android.util.Log
+import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -12,11 +12,9 @@ import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.appComponent
 import com.khudyakovvladimir.vhowl.app.data
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
-import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import javax.inject.Inject
 
-
-class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
+class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(context, attributeSet), SurfaceHolder.Callback {
     var gameThread: GameThread? = null
     var path: Path? = null
     var paint: Paint? = null
@@ -40,7 +38,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
         context.appComponent.injectGameView(this)
 
         holder.addCallback(this)
-        gameThread = GameThread(holder, this)
+        gameThread = GameThread(holder, this, context)
 
         path = Path()
         paint = Paint()
@@ -50,7 +48,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
     }
 
     override fun surfaceCreated(p0: SurfaceHolder) {
-        gameThread?.isRunning = true
+        context.data.isRunning = true
         gameThread?.start()
     }
 
@@ -59,7 +57,16 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
     }
 
     override fun surfaceDestroyed(p0: SurfaceHolder) {
+        var retry = true
+        context.data.isRunning = false
+        while (retry) {
+            try {
+                gameThread!!.join()
+                retry = false
+            } catch (e: InterruptedException) {
 
+            }
+        }
     }
 
     override fun draw(canvas: Canvas?) {
@@ -105,7 +112,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
 
     fun updateBackgroundLocation(background: Background) {
         val delta = 5F
-        //-2465
+
         if (background.x > -2500) {
             background.x = background.x - delta
         }
@@ -133,7 +140,7 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
             //mouse.x = 1080F
             soundHelper.playSoundMouseWin(false)
             soundHelper.stopSoundWind()
-            gameThread?.isRunning = false
+            context.data.isRunning = false
             findNavController().navigate(R.id.startFragment)
         }
     }
@@ -176,8 +183,6 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
             list[i].speed = randomSpeed
             list[i].radius = 100f
             list[i].delay = randomDelay
-
-            //= Cloud(1800F, randomPositionByY, randomSpeed, 100F, randomDelay, context)
         }
         return list
     }
@@ -196,7 +201,6 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
             val randomSpeed = (20..45).random().toFloat()
             mouse.y = randomPositionByY
             mouse.speed = randomSpeed
-            Log.d("TAG", "countOfMouses = $countOfMouses")
             context.data.countOfMouse = countOfMouses
             return true
         }
@@ -213,11 +217,15 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
             val randomSpeed = (5..20).random().toFloat()
             _cloud.y = randomPositionByY
             _cloud.speed = randomSpeed
-            gameThread?.isRunning = false
+            context.data.isRunning = false
             findNavController().navigate(R.id.startFragment)
             return true
         }
         return false
+    }
+
+    fun soundOff() {
+        soundHelper.stopSoundWind()
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -225,7 +233,6 @@ class GameView(context: Context): SurfaceView(context), SurfaceHolder.Callback {
         val touchY = event.y
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-//                soundHelper.playSoundWind(false)
                 soundHelper.playSoundOwl(false)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     soundHelper.vibrate(context, 10)

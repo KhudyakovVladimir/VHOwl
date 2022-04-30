@@ -15,9 +15,9 @@ class Cloud (
     context: Context
 ) {
 
-    val cloudBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.cloud)
+    private val cloudBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.cloud)
 
     fun drawCloud(canvas: Canvas?) {
-        canvas?.drawBitmap(cloudBitmap, x, y, null)
+        canvas?.drawBitmap(cloudBitmap, x - 100F, y - 100F, null)
     }
 }

@@ -59,6 +59,7 @@ class SoundHelper @Inject constructor(val application: Application) {
 
     fun stopSoundWind() {
         mediaPlayer!!.stop()
+        mediaPlayer = MediaPlayer.create(application.applicationContext, R.raw.wind)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

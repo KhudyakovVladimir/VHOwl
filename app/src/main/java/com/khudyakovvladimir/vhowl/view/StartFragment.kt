@@ -16,8 +16,6 @@ import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.data
-import com.khudyakovvladimir.vhowl.game.OwlReady
-import com.khudyakovvladimir.vhowl.game.OwlSleep
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import kotlinx.android.synthetic.main.start_fragment_layout.*
 import javax.inject.Inject
@@ -66,6 +64,8 @@ class StartFragment: Fragment() {
 
         textViewTime.text = context!!.data.time
         textViewCount.text = "${context!!.data.countOfMouse}"
+
+        context!!.data.countOfMouse = 0
 
         Log.d("TAG", "app mouse = ${context!!.data.countOfMouse}")
         Log.d("TAG", "app time = ${context!!.data.time}")
