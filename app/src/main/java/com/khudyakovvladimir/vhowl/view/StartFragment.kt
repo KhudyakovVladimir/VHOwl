@@ -65,7 +65,7 @@ class StartFragment: Fragment() {
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
         textViewTime.text = context!!.data.time
-        textViewCount.text = "Поймано мышек - ${context!!.data.countOfMouse}"
+        textViewCount.text = "${context!!.data.countOfMouse}"
 
         Log.d("TAG", "app mouse = ${context!!.data.countOfMouse}")
         Log.d("TAG", "app time = ${context!!.data.time}")

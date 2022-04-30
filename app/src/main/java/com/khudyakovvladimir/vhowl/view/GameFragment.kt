@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.khudyakovvladimir.vhowl.game.GameView
@@ -16,8 +15,10 @@ import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.data
-import com.khudyakovvladimir.vhowl.game.Data
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
+import kotlinx.android.synthetic.main.game_fragment_layout.*
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class GameFragment: Fragment() {
@@ -26,8 +27,6 @@ class GameFragment: Fragment() {
     lateinit var factory: GameViewModelFactory.Factory
     lateinit var gameViewModel: GameViewModel
     lateinit var gameViewModelFactory: GameViewModelFactory
-
-    lateinit var linearLayout: LinearLayout
 
     var startTime = 0
     var endTime = 0
@@ -52,32 +51,15 @@ class GameFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        linearLayout = view.findViewById(R.id.linearLayout)
         linearLayout.addView(GameView(activity!!.applicationContext))
 
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
-
-        //soundHelper.playSoundWind(false)
     }
 
     override fun onStop() {
         super.onStop()
-        var word = ""
-        endTime = (System.currentTimeMillis().toInt() - startTime) / 1000
-        if(endTime == 1) {
-            word = "Вы продержались $endTime секунду"
-        }
-        if(endTime in 2..4) {
-            word = "Вы продержались $endTime секунды"
-        }
-        if(endTime in 5..59) {
-            word = "Вы продержались $endTime секунд"
-        }
-        if(endTime > 60) {
-            word = "Вы продержались ${endTime.toDouble() / 60} минут"
-        }
-        Log.d("TAG", "endTime = $word")
-        context?.data?.time = word
+        endTime = System.currentTimeMillis().toInt()
+        systemHelper.getGameSessionTime(startTime, endTime, context!!)
     }
 }

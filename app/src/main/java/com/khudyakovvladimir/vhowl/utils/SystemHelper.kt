@@ -12,6 +12,9 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.fragment.app.Fragment
 import com.khudyakovvladimir.vhowl.R
+import com.khudyakovvladimir.vhowl.app.data
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class SystemHelper @Inject constructor() {
@@ -85,6 +88,16 @@ class SystemHelper @Inject constructor() {
         })
         img.startAnimation(fadeIn)
         img.visibility = View.VISIBLE
+    }
+
+    fun getGameSessionTime(startTime: Int, endTime: Int, context: Context){
+        var word = ""
+        val simpleDateFormat = SimpleDateFormat("mm:ss")
+        val date1 = Date(startTime.toLong())
+        val date = Date(endTime.toLong())
+        val diff = date.time - date1.time
+        word = simpleDateFormat.format(diff)
+        context.data.time = word
     }
 
 //    fun alpha(context: Context, view: View) {
