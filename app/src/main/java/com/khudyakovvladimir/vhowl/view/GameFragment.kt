@@ -54,9 +54,11 @@ class GameFragment: Fragment() {
         imageViewPause.setOnClickListener {
             if((count % 2) == 0) {
                 context!!.data.isPause = true
+                imageViewPause.setBackgroundResource(R.drawable.ready_owl)
                 count++
             }else {
                 context!!.data.isPause = false
+                imageViewPause.setBackgroundResource(R.drawable.sleeping_owl)
                 count++
             }
         }

@@ -30,6 +30,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
     val cloud = Cloud(1000F, 400F, 20F, 30F, 1000F, context)
     val cloud2 = Cloud(1300F, 800F, 15F, 30F, 1000F, context)
     val cloud3 = Cloud(1600F, 1200F, 5F, 30F, 1000F, context)
+    val lightning = Lightning(800F, 800F, 20F, 30F, context)
     val background = Background(0F, context)
     val listOfClouds = generateClouds()
 
@@ -75,6 +76,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         drawOwl(canvas)
         drawMouse(canvas)
         drawCloud(canvas)
+        //drawLightning(canvas)
     }
 
     fun customizePaint(color: Int) {
@@ -97,6 +99,10 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         cloud3.drawCloud(canvas)
     }
 
+    fun drawLightning(canvas: Canvas?) {
+        lightning.drawLightning(canvas)
+    }
+
     fun drawBackground(canvas: Canvas?) {
         background.drawBackground(canvas)
     }
@@ -108,6 +114,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         updateCloudLocation(cloud)
         updateCloudLocation(cloud2)
         updateCloudLocation(cloud3)
+        //updateLightningLocation(lightning)
     }
 
     fun updateBackgroundLocation(background: Background) {
@@ -154,6 +161,20 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         if (cloud.x < -200F) {
             cloud.x = 1080F
             cloud.y = (600..1800).random().toFloat()
+        }
+    }
+
+    fun updateLightningLocation(lightning: Lightning) {
+        val delta = lightning.speed
+        if (lightning.x > -360F) {
+            lightning.x = lightning.x - delta
+            lightning.y = lightning.y + delta
+        }
+        if (lightning.x < -300F) {
+            soundHelper.playSoundMouseWin(false)
+            soundHelper.stopSoundWind()
+            context.data.isRunning = false
+            findNavController().navigate(R.id.startFragment)
         }
     }
 

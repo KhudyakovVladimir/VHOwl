@@ -17,7 +17,7 @@
 
         <ImageView
                 android:id="@+id/imageViewPause"
-                android:background="@drawable/timer"
+                android:background="@drawable/sleeping_owl"
                 android:layout_width="30dp"
                 android:layout_height="30dp">
         </ImageView>
