@@ -11,7 +11,6 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.fragment.app.Fragment
-import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.data
 import java.text.SimpleDateFormat
 import java.util.*
@@ -96,8 +95,25 @@ class SystemHelper @Inject constructor() {
         val date1 = Date(startTime.toLong())
         val date = Date(endTime.toLong())
         val diff = date.time - date1.time
+        Log.d("TAG", "diff = $diff")
         word = simpleDateFormat.format(diff)
         context.data.time = word
+    }
+
+    fun checkTimeToThunder(startTime: Int, _delay: Long): Boolean{
+        var start = Date(startTime.toLong())
+        var delay = Date(_delay)
+        var summaryTime = start.time + delay.time
+        var currentTime = System.currentTimeMillis()
+        //Log.d("TAG", "start = $start")
+        //Log.d("TAG", "delay = $delay")
+        //Log.d("TAG", "summaryTime = $summaryTime")
+        //Log.d("TAG", "currentTime = $currentTime")
+        if(currentTime == summaryTime) {
+            Log.d("TAG", "THUNDER !!!")
+            return true
+        }
+        return false
     }
 
 //    fun alpha(context: Context, view: View) {

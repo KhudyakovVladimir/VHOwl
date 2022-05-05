@@ -40,6 +40,7 @@ class GameFragment: Fragment() {
         super.onAttach(context)
         context.appComponent.injectGameFragment(this)
         startTime = System.currentTimeMillis().toInt()
+        Log.d("TAG", "FRAGMENT startTime = $startTime")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

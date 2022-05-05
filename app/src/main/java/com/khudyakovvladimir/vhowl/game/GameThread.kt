@@ -39,16 +39,13 @@ class GameThread(
                     if (lastFpsTime >= 1000000000) {
                         lastFpsTime = 0
                     }
-
                     if (!context.data.isPause) {
                         gameView.update()
                         gameView.soundHelper.playSoundWind(false)
                     }else {
                         gameView.soundOff()
                     }
-
                     gameView.draw(canvas!!)
-
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -12,6 +13,7 @@ import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.appComponent
 import com.khudyakovvladimir.vhowl.app.data
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
+import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import javax.inject.Inject
 
 class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(context, attributeSet), SurfaceHolder.Callback {
@@ -23,16 +25,20 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
     @Inject
     lateinit var soundHelper: SoundHelper
 
-    var countOfMouses = 0
+    @Inject
+    lateinit var systemHelper: SystemHelper
+
+    var countOfMouse = 0
+    var startTime = 0
 
     val owl = Owl(100F, 1000F, context)
     val mouse = Mouse(1000F, 1800F, 15F,100F,true, context)
-    val cloud = Cloud(1000F, 400F, 20F, 30F, 1000F, context)
-    val cloud2 = Cloud(1300F, 800F, 15F, 30F, 1000F, context)
-    val cloud3 = Cloud(1600F, 1200F, 5F, 30F, 1000F, context)
-    val lightning = Lightning(800F, 800F, 20F, 30F, context)
+    val cloud = Cloud(1000F, 400F, 20F, 30F, 800F, true ,context)
+    val cloud2 = Cloud(1300F, 800F, 15F, 30F, 1000F, false ,context)
+    val cloud3 = Cloud(1600F, 1200F, 5F, 30F, 1000F, false, context)
+    val lightning = Lightning(2800F, 800F, 20F, 30F, context)
     val background = Background(0F, context)
-    val listOfClouds = generateClouds()
+    //val listOfClouds = generateClouds()
 
     init {
 
@@ -51,6 +57,8 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
     override fun surfaceCreated(p0: SurfaceHolder) {
         context.data.isRunning = true
         gameThread?.start()
+        startTime = System.currentTimeMillis().toInt()
+        Log.d("TAG", "startTime = $startTime")
     }
 
     override fun surfaceChanged(p0: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
@@ -76,7 +84,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         drawOwl(canvas)
         drawMouse(canvas)
         drawCloud(canvas)
-        //drawLightning(canvas)
+        drawLightning(canvas)
     }
 
     fun customizePaint(color: Int) {
@@ -114,7 +122,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         updateCloudLocation(cloud)
         updateCloudLocation(cloud2)
         updateCloudLocation(cloud3)
-        //updateLightningLocation(lightning)
+        updateLightningLocation(lightning)
     }
 
     fun updateBackgroundLocation(background: Background) {
@@ -144,7 +152,6 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
             mouse.x = mouse.x - delta
         }
         if (mouse.x < -300F) {
-            //mouse.x = 1080F
             soundHelper.playSoundMouseWin(false)
             soundHelper.stopSoundWind()
             context.data.isRunning = false
@@ -152,29 +159,39 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         }
     }
 
-    fun updateCloudLocation(cloud: Cloud) {
-        //Log.d("TAG", "updateCloudLocation()")
-        val delta = cloud.speed
-        if (cloud.x > -240F) {
-            cloud.x = cloud.x - delta
+    fun updateCloudLocation(_cloud: Cloud) {
+        val delta = _cloud.speed
+        if (_cloud.x > -240F) {
+
+            if (_cloud.isDanger) {
+                if (_cloud.x == _cloud.delay) {
+                    lightning.x = _cloud.x - 100
+                    lightning.y = _cloud.y
+                    val random = ((3..9).random().toFloat()) * 100
+                    cloud.delay = random
+                    cloud.isDanger = false
+                }
+            }
+
+            _cloud.x = _cloud.x - delta
         }
-        if (cloud.x < -200F) {
-            cloud.x = 1080F
-            cloud.y = (600..1800).random().toFloat()
+        if (_cloud.x < -200F) {
+            _cloud.x = 1080F
+            _cloud.y = (600..1800).random().toFloat()
+
+            when((0..1).random()) {
+                0 -> { _cloud.isDanger = false }
+                1 -> { _cloud.isDanger = true }
+            }
+
         }
     }
 
     fun updateLightningLocation(lightning: Lightning) {
         val delta = lightning.speed
-        if (lightning.x > -360F) {
+        if (lightning.y < 2400F) {
             lightning.x = lightning.x - delta
             lightning.y = lightning.y + delta
-        }
-        if (lightning.x < -300F) {
-            soundHelper.playSoundMouseWin(false)
-            soundHelper.stopSoundWind()
-            context.data.isRunning = false
-            findNavController().navigate(R.id.startFragment)
         }
     }
 
@@ -190,28 +207,28 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         }
     }
 
-    fun generateClouds(): List<Cloud> {
-        val list = arrayListOf(cloud, cloud, cloud)
-
-        for (i in 0 until list.size) {
-
-            val randomPositionByY = (300..1000).random().toFloat()
-            val randomSpeed = (5..10).random().toFloat()
-            val randomDelay = (1..3).random().toFloat()
-
-            list[i].x = 980F
-            list[i].y = randomPositionByY
-            list[i].speed = randomSpeed
-            list[i].radius = 100f
-            list[i].delay = randomDelay
-        }
-        return list
-    }
+//    fun generateClouds(): List<Cloud> {
+//        val list = arrayListOf(cloud, cloud, cloud)
+//
+//        for (i in 0 until list.size) {
+//
+//            val randomPositionByY = (300..1000).random().toFloat()
+//            val randomSpeed = (5..10).random().toFloat()
+//            val randomDelay = (1..3).random().toFloat()
+//
+//            list[i].x = 980F
+//            list[i].y = randomPositionByY
+//            list[i].speed = randomSpeed
+//            list[i].radius = 100f
+//            list[i].delay = randomDelay
+//        }
+//        return list
+//    }
 
     fun isCaughtByMouse(_mouse: Mouse, owl: Owl): Boolean {
         //Log.d("TAG", "isCaughtByOwl()")
         if(owl.x in _mouse.x - _mouse.radius.._mouse.x + _mouse.radius && owl.y in _mouse.y - _mouse.radius.._mouse.y + _mouse.radius) {
-            countOfMouses++
+            countOfMouse++
             soundHelper.playSoundMouse(false)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 soundHelper.vibrate(context, 20)
@@ -222,7 +239,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
             val randomSpeed = (20..45).random().toFloat()
             mouse.y = randomPositionByY
             mouse.speed = randomSpeed
-            context.data.countOfMouse = countOfMouses
+            context.data.countOfMouse = countOfMouse
             return true
         }
         return false

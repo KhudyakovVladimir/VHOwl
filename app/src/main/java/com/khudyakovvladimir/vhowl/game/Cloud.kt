@@ -12,12 +12,18 @@ class Cloud (
     var speed: Float,
     var radius: Float,
     var delay: Float,
+    var isDanger: Boolean,
     context: Context
 ) {
 
     private val cloudBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.cloud)
+    private val cloudDangerBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.cloud_danger)
 
     fun drawCloud(canvas: Canvas?) {
-        canvas?.drawBitmap(cloudBitmap, x - 100F, y - 100F, null)
+        if (isDanger) {
+            canvas?.drawBitmap(cloudDangerBitmap, x - 100F, y - 100F, null)
+        }else {
+            canvas?.drawBitmap(cloudBitmap, x - 100F, y - 100F, null)
+        }
     }
 }
