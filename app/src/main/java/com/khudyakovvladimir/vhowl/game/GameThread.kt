@@ -46,6 +46,7 @@ class GameThread(
                         gameView.soundOff()
                     }
                     gameView.draw(canvas!!)
+                    gameView.detectCollisions()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

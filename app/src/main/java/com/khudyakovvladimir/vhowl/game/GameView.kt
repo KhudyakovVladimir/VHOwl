@@ -38,7 +38,6 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
     val cloud3 = Cloud(1600F, 1200F, 5F, 30F, 1000F, false, context)
     val lightning = Lightning(2800F, 800F, 20F, 30F, context)
     val background = Background(0F, context)
-    //val listOfClouds = generateClouds()
 
     init {
 
@@ -195,38 +194,15 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         }
     }
 
-    fun updateCloudsLocation(list: List<Cloud>) {
-        for(i in 0..list.size - 1) {
-            val delta = list[i].speed
-            if (list[i].x > 0F) {
-                list[i].x =  list[i].x - delta
-            }
-            if (list[i].x == 20F) {
-                list[i].x = 1080F
-            }
-        }
+    fun detectCollisions() {
+        isCaughtByMouse(mouse, owl)
+        isCaughtByCloud(cloud, owl)
+        isCaughtByCloud(cloud2, owl)
+        isCaughtByCloud(cloud3, owl)
+        isCaughtByLightning(lightning, owl)
     }
 
-//    fun generateClouds(): List<Cloud> {
-//        val list = arrayListOf(cloud, cloud, cloud)
-//
-//        for (i in 0 until list.size) {
-//
-//            val randomPositionByY = (300..1000).random().toFloat()
-//            val randomSpeed = (5..10).random().toFloat()
-//            val randomDelay = (1..3).random().toFloat()
-//
-//            list[i].x = 980F
-//            list[i].y = randomPositionByY
-//            list[i].speed = randomSpeed
-//            list[i].radius = 100f
-//            list[i].delay = randomDelay
-//        }
-//        return list
-//    }
-
     fun isCaughtByMouse(_mouse: Mouse, owl: Owl): Boolean {
-        //Log.d("TAG", "isCaughtByOwl()")
         if(owl.x in _mouse.x - _mouse.radius.._mouse.x + _mouse.radius && owl.y in _mouse.y - _mouse.radius.._mouse.y + _mouse.radius) {
             countOfMouse++
             soundHelper.playSoundMouse(false)
@@ -246,15 +222,20 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
     }
 
     fun isCaughtByCloud(_cloud: Cloud, owl: Owl): Boolean {
-        //Log.d("TAG", "isCaughtByOwl()")
         if(owl.x in _cloud.x - _cloud.radius.._cloud.x + _cloud.radius && owl.y in _cloud.y - _cloud.radius.._cloud.y + _cloud.radius) {
-            _cloud.x = 1080F
             soundHelper.stopSoundWind()
             soundHelper.playSoundThunder(false)
-            val randomPositionByY = (1200..2000).random().toFloat()
-            val randomSpeed = (5..20).random().toFloat()
-            _cloud.y = randomPositionByY
-            _cloud.speed = randomSpeed
+            context.data.isRunning = false
+            findNavController().navigate(R.id.startFragment)
+            return true
+        }
+        return false
+    }
+
+    fun isCaughtByLightning(_lightning: Lightning, owl: Owl): Boolean {
+        if(owl.x in _lightning.x + 100 - _lightning.radius.._lightning.x + 100 + _lightning.radius && owl.y in _lightning.y + 100 - _lightning.radius.._lightning.y + 100 + _lightning.radius) {
+            soundHelper.stopSoundWind()
+            soundHelper.playSoundThunder(false)
             context.data.isRunning = false
             findNavController().navigate(R.id.startFragment)
             return true
@@ -277,18 +258,10 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
                 }
                 owl.x = touchX
                 owl.y = touchY
-                isCaughtByMouse(mouse, owl)
-                isCaughtByCloud(cloud, owl)
-                isCaughtByCloud(cloud2, owl)
-                isCaughtByCloud(cloud3, owl)
             }
             MotionEvent.ACTION_MOVE -> {
                 owl.x = touchX
                 owl.y = touchY
-                isCaughtByMouse(mouse, owl)
-                isCaughtByCloud(cloud, owl)
-                isCaughtByCloud(cloud2, owl)
-                isCaughtByCloud(cloud3, owl)
             }
             MotionEvent.ACTION_UP -> {
                 owl.x = touchX
