@@ -59,6 +59,10 @@ class StartFragment: Fragment() {
             findNavController().navigate(R.id.gameFragment)
         }
 
+        imageView.setOnClickListener {
+            //findNavController().navigate(R.id.highScoreFragment)
+        }
+
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
@@ -66,8 +70,5 @@ class StartFragment: Fragment() {
         textViewCount.text = "${context!!.data.countOfMouse}"
 
         context!!.data.countOfMouse = 0
-
-        Log.d("TAG", "app mouse = ${context!!.data.countOfMouse}")
-        Log.d("TAG", "app time = ${context!!.data.time}")
     }
 }
