@@ -13,6 +13,9 @@ interface HighScoreDao {
     @Query("SELECT * FROM high_score ORDER BY score DESC")
     fun getAllHighScoreAsLiveData(): LiveData<List<HighScore>>?
 
+    @Query("SELECT * FROM high_score WHERE id = :id")
+    fun getHighScoreById(id: Int): HighScore
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHighScore(highScore: HighScore)
 

@@ -60,7 +60,7 @@ class StartFragment: Fragment() {
         }
 
         imageView.setOnClickListener {
-            //findNavController().navigate(R.id.highScoreFragment)
+            findNavController().navigate(R.id.highScoreFragment)
         }
 
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)

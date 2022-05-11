@@ -11,7 +11,7 @@ abstract class HighScoreDatabase: RoomDatabase() {
     abstract fun highScoreDao(): HighScoreDao
 
     companion object {
-        private const val HIGH_SCORE_DB = "high_score_db"
+        private const val HIGH_SCORE_DB = "high_score"
         var instance: HighScoreDatabase? = null
 
         fun getInstance(context: Context): HighScoreDatabase? {

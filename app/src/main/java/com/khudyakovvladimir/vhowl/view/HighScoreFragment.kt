@@ -3,6 +3,7 @@ package com.khudyakovvladimir.vhowl.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +11,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.appComponent
 import com.khudyakovvladimir.vhowl.app.data
 import com.khudyakovvladimir.vhowl.database.DBHelper
+import com.khudyakovvladimir.vhowl.database.HighScore
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import kotlinx.android.synthetic.main.start_fragment_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HighScoreFragment: Fragment() {
@@ -44,10 +50,12 @@ class HighScoreFragment: Fragment() {
         val sharedPreferences = activity?.applicationContext!!.getSharedPreferences("settings", AppCompatActivity.MODE_PRIVATE)
 
         if (sharedPreferences.contains("database")) {
+            Log.d("TAG", "DB is created")
             isDatabaseCreated = sharedPreferences.getBoolean("database", false)
         }
 
         if (!isDatabaseCreated) {
+            Log.d("TAG", "DB is NOT created")
             val dbHelper = activity?.let { DBHelper(it) }
             dbHelper?.createDatabase()
 
@@ -64,6 +72,19 @@ class HighScoreFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
+        gameViewModel =ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
+//        gameViewModel.getListOfHighScore()?.observe(this) {
+//
+//        }
+//
+//        var tempHighScore = HighScore(0, "Owl", 100)
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val job = launch {
+//                tempHighScore = gameViewModel.getHighScoreById(0)!!
+//            }
+//            job.join()
+//        }
     }
 }
