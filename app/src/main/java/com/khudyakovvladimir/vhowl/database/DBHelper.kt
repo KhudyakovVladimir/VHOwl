@@ -20,7 +20,7 @@ class DBHelper(private val context: Context) {
             Log.d("TAG", "isDatabaseCreated = true")
         }else {
             CoroutineScope(Dispatchers.IO).launch {
-                highScoreDatabase.highScoreDao().insertHighScore(HighScore(0, "Owl", 0))
+                highScoreDatabase.highScoreDao().insertHighScore(HighScore(1, "Owl", 0))
             }
         }
 

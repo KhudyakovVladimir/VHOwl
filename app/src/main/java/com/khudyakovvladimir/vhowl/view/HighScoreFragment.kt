@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
+import kotlinx.android.synthetic.main.high_score_fragment_layout.*
 import kotlinx.android.synthetic.main.start_fragment_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +42,6 @@ class HighScoreFragment: Fragment() {
     @Inject
     lateinit var soundHelper: SoundHelper
 
-    lateinit var constraintLayout: ConstraintLayout
     private var isDatabaseCreated = false
 
     override fun onAttach(context: Context) {
@@ -75,16 +76,17 @@ class HighScoreFragment: Fragment() {
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel =ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
-//        gameViewModel.getListOfHighScore()?.observe(this) {
-//
-//        }
-//
-//        var tempHighScore = HighScore(0, "Owl", 100)
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val job = launch {
-//                tempHighScore = gameViewModel.getHighScoreById(0)!!
-//            }
-//            job.join()
-//        }
+        gameViewModel.getListOfHighScore()?.observe(this) {
+            Log.d("TAG", "list = $it")
+            textView.text = it.toString()
+        }
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                //do something what you need
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
     }
 }

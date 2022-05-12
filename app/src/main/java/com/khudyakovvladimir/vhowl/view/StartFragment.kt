@@ -16,8 +16,12 @@ import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.data
+import com.khudyakovvladimir.vhowl.database.HighScore
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import kotlinx.android.synthetic.main.start_fragment_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class StartFragment: Fragment() {
@@ -33,8 +37,6 @@ class StartFragment: Fragment() {
     @Inject
     lateinit var soundHelper: SoundHelper
 
-    lateinit var constraintLayout: ConstraintLayout
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         context.appComponent.injectStartFragment(this)
@@ -47,7 +49,6 @@ class StartFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        constraintLayout = view.findViewById(R.id.constraintLayout)
         systemHelper.fadeInView(constraintLayout, 1000)
 
         owlSleep.setOnClickListener {
@@ -69,6 +70,16 @@ class StartFragment: Fragment() {
         textViewTime.text = context!!.data.time
         textViewCount.text = "${context!!.data.countOfMouse}"
 
-        context!!.data.countOfMouse = 0
+        CoroutineScope(Dispatchers.IO).launch {
+            val job = launch {
+                gameViewModel.highScoreDao.insertHighScore(HighScore(0, "Name", context!!.data.countOfMouse))
+
+                val currentScore = context!!.data.countOfMouse
+                val list = gameViewModel.highScoreDao.getAllHighScore()
+            }
+            job.join()
+            context!!.data.countOfMouse = 0
+        }
+
     }
 }

@@ -15,7 +15,7 @@ abstract class HighScoreDatabase: RoomDatabase() {
         var instance: HighScoreDatabase? = null
 
         fun getInstance(context: Context): HighScoreDatabase? {
-            if(instance != null) {
+            if(instance == null) {
                 synchronized(this) {
                     instance =
                         Room

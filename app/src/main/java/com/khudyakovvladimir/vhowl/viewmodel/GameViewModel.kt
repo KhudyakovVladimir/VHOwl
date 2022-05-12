@@ -33,14 +33,14 @@ class GameViewModel @Inject constructor(
     }
 
     fun getHighScoreById(id: Int): HighScore? {
-        var resultHIghScore: HighScore? = null
+        var resultHighScore: HighScore? = null
         runBlocking {
             val job = launch {
-                resultHIghScore = highScoreDao.getHighScoreById(id)
+                resultHighScore = highScoreDao.getHighScoreById(id)
             }
             job.join()
         }
-        return resultHIghScore
+        return resultHighScore
     }
 
 }
