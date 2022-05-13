@@ -9,6 +9,7 @@ import com.khudyakovvladimir.vhowl.game.GameView
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.view.GameFragment
+import com.khudyakovvladimir.vhowl.view.HeroFragment
 import com.khudyakovvladimir.vhowl.view.HighScoreFragment
 import com.khudyakovvladimir.vhowl.view.StartFragment
 import dagger.BindsInstance
@@ -23,6 +24,7 @@ interface AppComponent {
     fun injectGameFragment(gameFragment: GameFragment)
     fun injectStartFragment(startFragment: StartFragment)
     fun injectHighScoreFragment(highScoreFragment: HighScoreFragment)
+    fun injectHeroFragment(heroFragment: HeroFragment)
     fun injectGameView(gameView: GameView)
 
     @Component.Builder

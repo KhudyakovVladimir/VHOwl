@@ -19,7 +19,7 @@ import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
-import kotlinx.android.synthetic.main.high_score_fragment_layout.*
+//import kotlinx.android.synthetic.main.high_score_fragment_layout.*
 import javax.inject.Inject
 
 class HighScoreFragment: Fragment() {
@@ -52,16 +52,9 @@ class HighScoreFragment: Fragment() {
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel =ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
-//        gameViewModel.getListOfHighScore()?.observe(this) {
-//            Log.d("TAG", "list = $it")
-//            //textView.text = it.toString()
-//        }
-
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.visibility = View.VISIBLE
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
-
-        //val itemClick = { }
 
         val list = listOf(HighScore(0, "Owl", 0))
 
@@ -74,8 +67,8 @@ class HighScoreFragment: Fragment() {
 
         gameViewModel.getListOfHighScore()?.observe(this) {
             Log.d("TAG", "list = $it")
-            //textView.text = it.toString()
             highScoreAdapter.list = it
+            highScoreAdapter.notifyDataSetChanged()
         }
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {

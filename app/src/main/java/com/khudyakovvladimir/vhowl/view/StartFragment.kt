@@ -35,6 +35,8 @@ class StartFragment: Fragment() {
     @Inject
     lateinit var soundHelper: SoundHelper
 
+    var newRecord = false
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         context.appComponent.injectStartFragment(this)
@@ -59,7 +61,11 @@ class StartFragment: Fragment() {
         }
 
         imageView.setOnClickListener {
-            findNavController().navigate(R.id.highScoreFragment)
+            if(newRecord) {
+                findNavController().navigate(R.id.heroFragment)
+            }else {
+                findNavController().navigate(R.id.highScoreFragment)
+            }
         }
 
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
@@ -81,6 +87,7 @@ class StartFragment: Fragment() {
                 }
             }
             job.join()
+            newRecord = true
             context!!.data.countOfMouse = 0
         }
 

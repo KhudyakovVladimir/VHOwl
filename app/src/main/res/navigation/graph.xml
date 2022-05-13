@@ -9,7 +9,15 @@
         <action android:id="@+id/action_gameFragment_to_highScoreFragment" app:destination="@id/highScoreFragment"/>
     </fragment>
     <fragment android:id="@+id/startFragment" android:name="com.khudyakovvladimir.vhowl.view.StartFragment"
-              android:label="StartFragment"/>
+              android:label="StartFragment">
+        <action
+            android:id="@+id/action_startFragment_to_heroFragment"
+            app:destination="@id/heroFragment" />
+    </fragment>
     <fragment android:id="@+id/highScoreFragment" android:name="com.khudyakovvladimir.vhowl.view.HighScoreFragment"
               android:label="HighScoreFragment"/>
+    <fragment
+        android:id="@+id/heroFragment"
+        android:name="com.khudyakovvladimir.vhowl.view.HeroFragment"
+        android:label="HeroFragment" />
 </navigation>

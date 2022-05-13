@@ -5,7 +5,10 @@
       <map>
         <entry key="..\:/Users/slam/AndroidStudioProjects/VHGameOfLife/app/src/main/res/layout/canvas_fragment_layout.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/slam/AndroidStudioProjects/VHGameOfLife/app/src/main/res/layout/game_fragment_layout.xml" value="0.20208333333333334" />
-        <entry key="..\:/Users/slam/AndroidStudioProjects/VHOwl/app/src/main/res/layout/start_fragment_layout.xml" value="0.20208333333333334" />
+        <entry key="..\:/Users/slam/AndroidStudioProjects/VHOwl/app/src/main/res/layout/hero_fragment_layout.xml" value="0.17617753623188406" />
+        <entry key="..\:/Users/slam/AndroidStudioProjects/VHOwl/app/src/main/res/layout/high_score_fragment_layout.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/slam/AndroidStudioProjects/VHOwl/app/src/main/res/layout/item.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/slam/AndroidStudioProjects/VHOwl/app/src/main/res/layout/start_fragment_layout.xml" value="0.23345367027677497" />
       </map>
     </option>
   </component>
