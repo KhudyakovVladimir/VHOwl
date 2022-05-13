@@ -1,22 +1,27 @@
 package com.khudyakovvladimir.vhowl.view
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.khudyakovvladimir.vhowl.app.appComponent
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
 import com.khudyakovvladimir.vhowl.app.data
+import com.khudyakovvladimir.vhowl.database.DBHelper
+import com.khudyakovvladimir.vhowl.database.HighScore
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import kotlinx.android.synthetic.main.game_fragment_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GameFragment: Fragment() {
@@ -30,6 +35,7 @@ class GameFragment: Fragment() {
     private var endTime = 0
 
     var count = 0
+    private var isDatabaseCreated = false
 
     @Inject
     lateinit var systemHelper: SystemHelper
@@ -51,6 +57,25 @@ class GameFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel = ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
+
+        val sharedPreferences = activity?.applicationContext!!.getSharedPreferences("settings", AppCompatActivity.MODE_PRIVATE)
+
+        if (sharedPreferences.contains("database")) {
+            isDatabaseCreated = sharedPreferences.getBoolean("database", false)
+        }
+
+        if (!isDatabaseCreated) {
+            val dbHelper = activity?.let { DBHelper(it) }
+            dbHelper?.createDatabase()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                gameViewModel.highScoreDao.insertHighScore(HighScore(0, "Owl", context!!.data.countOfMouse))
+            }
+
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            editor.putBoolean("database", true)
+            editor.apply()
+        }
 
         imageViewPause.setOnClickListener {
             if((count % 2) == 0) {

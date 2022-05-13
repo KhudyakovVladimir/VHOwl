@@ -1,20 +1,25 @@
 package com.khudyakovvladimir.vhowl.utils
 
+import com.khudyakovvladimir.vhowl.R
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.content.Context
+import android.graphics.Color.alpha
 import android.graphics.Point
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Display
 import android.view.View
 import android.view.WindowManager
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
+import android.view.animation.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.animation.AnimationUtils
 import com.khudyakovvladimir.vhowl.app.data
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+
 
 class SystemHelper @Inject constructor() {
 
@@ -76,7 +81,7 @@ class SystemHelper @Inject constructor() {
         return list
     }
 
-    fun fadeInView(img: View, duration: Long) {
+    fun fadeInView(view: View, duration: Long) {
         val fadeIn: Animation = AlphaAnimation(0F, 1F)
         fadeIn.interpolator = AccelerateInterpolator()
         fadeIn.duration = duration
@@ -85,8 +90,18 @@ class SystemHelper @Inject constructor() {
             override fun onAnimationRepeat(animation: Animation) {}
             override fun onAnimationStart(animation: Animation) {}
         })
-        img.startAnimation(fadeIn)
-        img.visibility = View.VISIBLE
+        view.startAnimation(fadeIn)
+        view.visibility = View.VISIBLE
+    }
+
+    fun pulse(view: View, context: Context) {
+        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.pulse)
+        view.startAnimation(animation)
+    }
+
+    fun alpha(context: Context, view: View) {
+        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.pulse)
+        view.startAnimation(animation)
     }
 
     fun getGameSessionTime(startTime: Int, endTime: Int, context: Context){
@@ -116,33 +131,5 @@ class SystemHelper @Inject constructor() {
         return false
     }
 
-//    fun alpha(context: Context, view: View) {
-//        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.alpha)
-//        view.startAnimation(animation)
-//    }
-//
-//    fun rotate(context: Context, view: View) {
-//        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.rotate)
-//        view.startAnimation(animation)
-//    }
-//
-//    fun scale(context: Context, view: View) {
-//        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.scale_two)
-//        view.startAnimation(animation)
-//    }
-//
-//    fun translate(context: Context, view: View) {
-//        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.transform)
-//        view.startAnimation(animation)
-//    }
-//
-//    fun rightToLeft(context: Context, view: View) {
-//        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.right_to_left)
-//        view.startAnimation(animation)
-//    }
-//
-//    fun leftToRight(context: Context, view: View) {
-//        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.left_to_right)
-//        view.startAnimation(animation)
-//    }
+
 }

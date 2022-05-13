@@ -3,11 +3,9 @@ package com.khudyakovvladimir.vhowl.view
 import androidx.navigation.fragment.findNavController
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.khudyakovvladimir.vhowl.app.appComponent
@@ -72,10 +70,15 @@ class StartFragment: Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val job = launch {
-                gameViewModel.highScoreDao.insertHighScore(HighScore(0, "Name", context!!.data.countOfMouse))
 
                 val currentScore = context!!.data.countOfMouse
                 val list = gameViewModel.highScoreDao.getAllHighScore()
+                val leader = list[0]
+                if(currentScore > leader.score) {
+                    gameViewModel.highScoreDao.insertHighScore(HighScore(0, "New Hero", currentScore))
+                    imageView.setImageResource(R.drawable.cup)
+                    systemHelper.pulse(imageView, context!!)
+                }
             }
             job.join()
             context!!.data.countOfMouse = 0
