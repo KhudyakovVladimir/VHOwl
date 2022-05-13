@@ -81,13 +81,13 @@ class StartFragment: Fragment() {
                 val list = gameViewModel.highScoreDao.getAllHighScore()
                 val leader = list[0]
                 if(currentScore > leader.score) {
+                    newRecord = true
                     gameViewModel.highScoreDao.insertHighScore(HighScore(0, "New Hero", currentScore))
                     imageView.setImageResource(R.drawable.cup)
                     systemHelper.pulse(imageView, context!!)
                 }
             }
             job.join()
-            newRecord = true
             context!!.data.countOfMouse = 0
         }
 

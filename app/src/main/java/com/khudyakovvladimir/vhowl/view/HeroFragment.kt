@@ -67,9 +67,11 @@ class HeroFragment: Fragment() {
                             editTextHeroFragment.text.toString(),
                             leader.score)
                     )
-                    imageView.setImageResource(R.drawable.cup)
                 }
                 job.join()
+                CoroutineScope(Dispatchers.Main).launch {
+                    findNavController().navigate(R.id.highScoreFragment)
+                }
             }
         }
 
