@@ -8,8 +8,8 @@ import com.khudyakovvladimir.vhowl.app.data
 class GameThread(
     var surfaceHolder: SurfaceHolder,
     var gameView: GameView,
-    var context: Context
-    ): Thread() {
+    var context: Context,
+): Thread() {
 
     companion object {
         private var canvas: Canvas? = null
@@ -18,7 +18,7 @@ class GameThread(
     override fun run() {
 
         var lastLoopTime = System.nanoTime()
-        val TARGET_FPS = 20
+        val TARGET_FPS = 50
         val OPTIMAL_TIME = (1000000000 / TARGET_FPS).toLong()
         var lastFpsTime: Long = 0
 

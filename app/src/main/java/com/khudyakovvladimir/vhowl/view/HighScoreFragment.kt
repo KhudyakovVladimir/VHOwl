@@ -2,7 +2,6 @@ package com.khudyakovvladimir.vhowl.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,9 @@ import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import kotlinx.android.synthetic.main.high_score_fragment_layout.*
-//import kotlinx.android.synthetic.main.high_score_fragment_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HighScoreFragment: Fragment() {
@@ -70,7 +71,6 @@ class HighScoreFragment: Fragment() {
         recyclerView.adapter = highScoreAdapter
 
         gameViewModel.getListOfHighScore()?.observe(this) {
-            Log.d("TAG", "list = $it")
             highScoreAdapter.list = it
             highScoreAdapter.notifyDataSetChanged()
         }
@@ -82,5 +82,12 @@ class HighScoreFragment: Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
 
+        imageViewDelete.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val job = launch { gameViewModel.highScoreDao.deleteAll() }
+                job.join()
+                gameViewModel.highScoreDao.insertHighScore(HighScore(0, "Owl", 0))
+            }
+        }
     }
 }

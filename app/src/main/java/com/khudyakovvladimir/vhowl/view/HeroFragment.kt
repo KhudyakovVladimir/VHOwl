@@ -13,11 +13,9 @@ import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
 import com.khudyakovvladimir.vhowl.R
-import com.khudyakovvladimir.vhowl.app.data
 import com.khudyakovvladimir.vhowl.database.HighScore
 import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import kotlinx.android.synthetic.main.hero_fragment_layout.*
-import kotlinx.android.synthetic.main.start_fragment_layout.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,11 +58,15 @@ class HeroFragment: Fragment() {
                 val job = launch {
                     val list = gameViewModel.highScoreDao.getAllHighScore()
                     val leader = list[0]
+                    var name = editTextHeroFragment.text.toString()
+                    if(name == "") {
+                        name = "New Hero"
+                    }
 
                     gameViewModel.highScoreDao.insertHighScore(
                         HighScore(
                             leader.id,
-                            editTextHeroFragment.text.toString(),
+                            name,
                             leader.score)
                     )
                 }
@@ -74,8 +76,6 @@ class HeroFragment: Fragment() {
                 }
             }
         }
-
-
 
     }
 }

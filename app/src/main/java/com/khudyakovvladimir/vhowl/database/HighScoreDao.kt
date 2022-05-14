@@ -16,6 +16,9 @@ interface HighScoreDao {
     @Query("SELECT * FROM high_score WHERE id = :id")
     fun getHighScoreById(id: Int): HighScore
 
+    @Query("DELETE FROM high_score")
+    fun deleteAll()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHighScore(highScore: HighScore)
 
