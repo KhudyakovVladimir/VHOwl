@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.khudyakovvladimir.vhowl.recyclerview.HighScoreAdapter
@@ -19,6 +20,7 @@ import com.khudyakovvladimir.vhowl.utils.SoundHelper
 import com.khudyakovvladimir.vhowl.utils.SystemHelper
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModel
 import com.khudyakovvladimir.vhowl.viewmodel.GameViewModelFactory
+import kotlinx.android.synthetic.main.high_score_fragment_layout.*
 //import kotlinx.android.synthetic.main.high_score_fragment_layout.*
 import javax.inject.Inject
 
@@ -49,6 +51,8 @@ class HighScoreFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        systemHelper.fadeInView(constraintLayoutHighScore, 1000)
+
         gameViewModelFactory = factory.createGameViewModelFactory(activity!!.application)
         gameViewModel =ViewModelProvider(this, gameViewModelFactory).get(GameViewModel::class.java)
 
@@ -73,7 +77,7 @@ class HighScoreFragment: Fragment() {
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                //do something what you need
+                findNavController().navigate(R.id.startFragment)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)

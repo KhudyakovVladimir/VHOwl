@@ -19,9 +19,8 @@ class HighScoreAdapter(
     inner class HighScoreViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
         fun bind(highScore: HighScore) {
-            Log.d("TAG", "BIND")
-
             itemView.imageViewItem.setImageResource(R.drawable.cup)
+            itemView.imageViewItemMouse.setImageResource(R.drawable.mouse)
             itemView.textViewItemName.text = highScore.name
             itemView.textViewItemScore.text = highScore.score.toString()
 

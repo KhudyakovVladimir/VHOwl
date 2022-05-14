@@ -19,20 +19,30 @@
 
     <TextView
             android:id="@+id/textViewItemName"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:paddingStart="5dp"
             android:gravity="center"
+            android:fontFamily="@font/segoesc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:textColor="@color/black"/>
+
+    <ImageView
+            android:id="@+id/imageViewItemMouse"
+            android:adjustViewBounds="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"/>
+
     <TextView
             android:id="@+id/textViewItemScore"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/segoesc"
             android:gravity="center"
             android:layout_weight="5"
-            android:textSize="12sp"
-            android:textColor="#595959"/>
+            android:textSize="18sp"
+            android:textColor="#011A2C"/>
 
 </LinearLayout>
