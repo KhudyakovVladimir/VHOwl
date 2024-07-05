@@ -1,5 +1,6 @@
 package com.khudyakovvladimir.vhowl.game
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.os.Build
@@ -28,11 +29,13 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
     @Inject
     lateinit var systemHelper: SystemHelper
 
+    var countOfSnake = 0
     var countOfMouse = 0
     var startTime = 0
 
     val owl = Owl(100F, 1000F, context)
-    val mouse = Mouse(1000F, 1800F, 15F,100F,true, context)
+    val snake = Snake(1000F, 1600F, 70F, 100F, true, context)
+    val mouse = Mouse(1000F, 1800F, 30F,100F,true, context)
     val cloud = Cloud(1000F, 400F, 20F, 30F, 800F, true ,context)
     val cloud2 = Cloud(1300F, 800F, 15F, 30F, 1000F, false ,context)
     val cloud3 = Cloud(1600F, 1200F, 5F, 30F, 1000F, false, context)
@@ -82,6 +85,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         drawBackground(canvas)
         drawOwl(canvas)
         drawMouse(canvas)
+        drawSnake(canvas)
         drawCloud(canvas)
         drawLightning(canvas)
     }
@@ -90,6 +94,10 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         paint?.alpha = 255
         paint?.color = color
         paint?.strokeWidth = 3f
+    }
+
+    fun drawSnake(canvas: Canvas?) {
+        snake.drawSnake(canvas)
     }
 
     fun drawMouse(canvas: Canvas?) {
@@ -117,6 +125,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
     fun update() {
         updateBackgroundLocation(background)
         updateOwlLocation()
+        updateSnakeLocation(snake)
         updateMouseLocation(mouse)
         updateCloudLocation(cloud)
         updateCloudLocation(cloud2)
@@ -142,6 +151,34 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         }
         if (owl.x == 950F) {
             owl.x = 0F
+        }
+    }
+
+    fun updateSnakeLocation(snake: Snake) {
+        val delta = snake.speed
+        if (snake.x > -360F) {
+            snake.x = snake.x - delta
+        }
+        if (snake.x < -300F) {
+            snake.x = 980F
+            val randomPositionByY = (1100..1900).random().toFloat()
+            val randomSpeed = (40..50).random().toFloat()
+            snake.y = randomPositionByY
+            snake.speed = randomSpeed
+            if(owl.x in snake.x - snake.radius..snake.x + snake.radius && owl.y in snake.y - snake.radius..snake.y + snake.radius) {
+                countOfSnake++
+                soundHelper.playSoundSnake(false)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    soundHelper.vibrate(context, 60)
+                }
+                snake.isAlive = false
+                snake.x = 980F
+                val randomPositionByY = (1100..1900).random().toFloat()
+                val randomSpeed = (40..50).random().toFloat()
+                snake.y = randomPositionByY
+                snake.speed = randomSpeed
+                context.data.countOfSnake = countOfSnake
+            }
         }
     }
 
@@ -195,11 +232,35 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
     }
 
     fun detectCollisions() {
+        isCaughtBySnake(snake, owl)
         isCaughtByMouse(mouse, owl)
         isCaughtByCloud(cloud, owl)
         isCaughtByCloud(cloud2, owl)
         isCaughtByCloud(cloud3, owl)
         isCaughtByLightning(lightning, owl)
+    }
+
+    fun isCaughtBySnake(_snake:Snake, owl: Owl): Boolean {
+        if(owl.x in _snake.x - _snake.radius.._snake.x + _snake.radius && owl.y in _snake.y - _snake.radius.._snake.y + _snake.radius) {
+            countOfSnake++
+            soundHelper.playSoundSnake(false)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                soundHelper.vibrate(context, 20)
+            }
+            snake.isAlive = false
+            snake.x = 980F
+            val randomPositionByY = (1100..1900).random().toFloat()
+            val randomSpeed = (75..85).random().toFloat()
+            snake.y = randomPositionByY
+            snake.speed = randomSpeed
+            context.data.countOfSnake = countOfSnake
+
+            //owl.x = (200..950).random().toFloat()
+            //owl.y = (1400..1800).random().toFloat()
+
+            return true
+        }
+        return false
     }
 
     fun isCaughtByMouse(_mouse: Mouse, owl: Owl): Boolean {
@@ -212,7 +273,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
             mouse.isAlive = false
             mouse.x = 980F
             val randomPositionByY = (1200..2000).random().toFloat()
-            val randomSpeed = (20..45).random().toFloat()
+            val randomSpeed = (33..40).random().toFloat()
             mouse.y = randomPositionByY
             mouse.speed = randomSpeed
             context.data.countOfMouse = countOfMouse
@@ -247,6 +308,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
         soundHelper.stopSoundWind()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val touchX = event.x
         val touchY = event.y

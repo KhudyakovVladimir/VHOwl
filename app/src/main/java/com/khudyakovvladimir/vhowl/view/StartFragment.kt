@@ -1,5 +1,6 @@
 package com.khudyakovvladimir.vhowl.view
 
+import android.annotation.SuppressLint
 import androidx.navigation.fragment.findNavController
 import android.content.Context
 import android.os.Bundle
@@ -46,6 +47,7 @@ class StartFragment: Fragment() {
         return inflater.inflate(R.layout.start_fragment_layout, container, false)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -15,6 +15,7 @@ import javax.inject.Inject
 class SoundHelper @Inject constructor(val application: Application) {
 
     private var soundPool: SoundPool = SoundPool(5, AudioManager.STREAM_MUSIC, 0)
+    private val snake = soundPool.load(application.applicationContext, R.raw.snake, 1)
     private val mouse = soundPool.load(application.applicationContext, R.raw.mouse_squeak,1)
     private val mouseWin = soundPool.load(application.applicationContext, R.raw.mouse_win,1)
     private val owl = soundPool.load(application.applicationContext, R.raw.owl,1)
@@ -24,6 +25,12 @@ class SoundHelper @Inject constructor(val application: Application) {
 
     init {
         mediaPlayer = MediaPlayer.create(application.applicationContext, R.raw.wind)
+    }
+
+    fun playSoundSnake(mute: Boolean) {
+        if(!mute) {
+            soundPool.play(snake, 0.05F, 0.05F, 0, 0, 1F)
+        }
     }
 
     fun playSoundMouse(mute: Boolean) {
