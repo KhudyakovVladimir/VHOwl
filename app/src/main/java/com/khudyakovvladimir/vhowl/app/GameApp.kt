@@ -40,3 +40,4 @@ val Context.data: Data
         is GameApp -> data
         else -> applicationContext.data
     }
+

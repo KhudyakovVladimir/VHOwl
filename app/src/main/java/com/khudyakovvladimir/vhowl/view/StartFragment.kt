@@ -75,6 +75,7 @@ class StartFragment: Fragment() {
 
         textViewTime.text = context!!.data.time
         textViewCount.text = "${context!!.data.countOfMouse}"
+        textViewCountSnake.text = "${context!!.data.countOfSnake}"
 
         CoroutineScope(Dispatchers.IO).launch {
             val job = launch {
@@ -91,6 +92,7 @@ class StartFragment: Fragment() {
             }
             job.join()
             context!!.data.countOfMouse = 0
+            context!!.data.countOfSnake = 0
         }
 
     }

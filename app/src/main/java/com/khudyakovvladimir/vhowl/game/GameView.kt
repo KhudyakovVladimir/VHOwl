@@ -277,6 +277,7 @@ class GameView(context: Context, attributeSet: AttributeSet): SurfaceView(contex
             mouse.y = randomPositionByY
             mouse.speed = randomSpeed
             context.data.countOfMouse = countOfMouse
+            context.data.countOfSnake = countOfSnake
             return true
         }
         return false
